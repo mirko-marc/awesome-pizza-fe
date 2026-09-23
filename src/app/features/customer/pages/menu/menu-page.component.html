@@ -1,0 +1,73 @@
+<section class="relative isolate overflow-hidden bg-[#8e1010] text-white">
+  <img
+    src="assets/images/pizza-hero.png"
+    alt="Una pizza margherita appena sfornata"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-[65%_center]"
+  />
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#750b0b] via-[#750b0b]/90 to-[#750b0b]/10"></div>
+  <div class="page-shell flex min-h-[31rem] items-center py-16 sm:min-h-[36rem]">
+    <div class="max-w-xl">
+      <p class="text-xs font-bold uppercase tracking-[0.24em] text-amber-200">Artigianale · appena sfornata · pronta per il ritiro</p>
+      <h1 class="mt-5 font-display text-5xl font-bold leading-[1.03] tracking-tight sm:text-6xl lg:text-7xl">
+        La tua pizza preferita, semplicemente fantastica.
+      </h1>
+      <p class="mt-6 max-w-lg text-base leading-7 text-white/80 sm:text-lg">
+        Scegli le tue pizze, invia l’ordine alla cucina e segui ogni fase fino al ritiro.
+      </p>
+      <a href="#menu" class="btn btn-secondary mt-8 border-0 shadow-xl">
+        Scopri il menu
+        <span class="material-icons text-lg" aria-hidden="true">south</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="menu" class="page-shell scroll-mt-24 py-14 sm:py-20">
+  <div class="mb-9 max-w-2xl">
+    <p class="eyebrow">Il nostro menu</p>
+    <h2 class="section-title mt-3">Scegli la tua prossima preferita</h2>
+    <p class="mt-3 leading-7 text-base-content/65">Ogni pizza viene preparata al momento con ingredienti selezionati con cura.</p>
+  </div>
+
+  @if (store.isMenuLoading()) {
+    <app-loading-indicator label="Stiamo preparando il menu…" />
+  } @else if (store.menuError(); as error) {
+    <app-alert [message]="error" [retryable]="true" (retry)="store.loadPizzas()" />
+  } @else if (store.pizzas().length === 0) {
+    <div class="surface-card py-14 text-center">
+      <span class="material-icons text-5xl text-base-content/20" aria-hidden="true">restaurant_menu</span>
+      <h3 class="mt-3 font-display text-2xl font-bold">Il menu si prende una pausa</h3>
+      <p class="mt-2 text-base-content/60">Al momento non ci sono pizze disponibili. Torna a trovarci tra poco.</p>
+    </div>
+  } @else {
+    <div class="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        @for (pizza of store.pizzas(); track pizza.id) {
+          <app-pizza-card
+            [pizza]="pizza"
+            [quantity]="store.quantities()[pizza.id] ?? 0"
+            (quantityChange)="store.setQuantity(pizza.id, $event)"
+          />
+        }
+      </div>
+      <app-order-summary
+        [items]="store.cartItems()"
+        [total]="store.cartTotal()"
+        [loading]="store.isCreatingOrder()"
+        [error]="store.orderError()"
+        (checkout)="placeOrder()"
+      />
+    </div>
+  }
+</section>
+
+<section class="bg-neutral py-12 text-neutral-content">
+  <div class="page-shell grid gap-8 sm:grid-cols-3">
+    @for (benefit of benefits; track benefit.title) {
+      <div class="flex gap-4">
+        <span class="material-icons text-3xl text-secondary" aria-hidden="true">{{ benefit.icon }}</span>
+        <div><h3 class="font-semibold">{{ benefit.title }}</h3><p class="mt-1 text-sm leading-6 text-neutral-content/60">{{ benefit.description }}</p></div>
+      </div>
+    }
+  </div>
+</section>

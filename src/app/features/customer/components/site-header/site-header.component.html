@@ -1,0 +1,49 @@
+<header class="sticky top-0 z-40 border-b border-base-300/80 bg-base-100/90 backdrop-blur-xl">
+  <div class="page-shell navbar min-h-16 px-0">
+    <div class="navbar-start">
+      <a routerLink="/" class="focus-ring flex items-center gap-2 rounded-lg" aria-label="Pagina iniziale Awesome Pizza">
+        <span class="grid size-10 place-items-center rounded-full bg-primary text-primary-content shadow-md">
+          <span class="material-icons" aria-hidden="true">local_pizza</span>
+        </span>
+        <span class="font-display text-xl font-bold tracking-tight">Awesome Pizza</span>
+      </a>
+    </div>
+
+    <nav class="navbar-end gap-1" aria-label="Navigazione principale">
+      <a
+        routerLink="/"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="text-primary"
+        class="btn btn-ghost hidden sm:inline-flex"
+      >
+        Menu
+      </a>
+      <a routerLink="/track" routerLinkActive="text-primary" class="btn btn-ghost">
+        <span class="material-icons text-lg" aria-hidden="true">near_me</span>
+        <span class="hidden sm:inline">Segui ordine</span>
+      </a>
+      <a
+        [routerLink]="authStore.isAuthenticated() ? '/admin' : '/admin/login'"
+        class="btn btn-primary btn-sm ml-1"
+        [attr.aria-label]="authStore.isAuthenticated() ? 'Apri l’area amministrativa' : 'Accedi all’area staff'"
+      >
+        <span class="material-icons text-lg" aria-hidden="true">
+          {{ authStore.isAuthenticated() ? 'space_dashboard' : 'badge' }}
+        </span>
+        <span class="hidden md:inline">
+          {{ authStore.isAuthenticated() ? 'Area amministrativa' : 'Accesso staff' }}
+        </span>
+      </a>
+      <button
+        type="button"
+        class="btn btn-circle btn-ghost"
+        (click)="themeService.toggle()"
+        [attr.aria-label]="themeService.theme() === 'pizzalight' ? 'Usa tema scuro' : 'Usa tema chiaro'"
+      >
+        <span class="material-icons" aria-hidden="true">
+          {{ themeService.theme() === 'pizzalight' ? 'dark_mode' : 'light_mode' }}
+        </span>
+      </button>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,60 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{html,ts}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['Fraunces', 'Georgia', 'serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: { glow: '0 20px 60px -20px rgba(153, 27, 27, 0.45)' },
+    },
+  },
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        pizzalight: {
+          primary: '#c92a22',
+          'primary-content': '#ffffff',
+          secondary: '#f0a43b',
+          'secondary-content': '#281500',
+          accent: '#327a4d',
+          'accent-content': '#ffffff',
+          neutral: '#292522',
+          'neutral-content': '#fdf8f0',
+          'base-100': '#fffdf9',
+          'base-200': '#f7f0e6',
+          'base-300': '#e9dece',
+          'base-content': '#292522',
+          info: '#2878a5',
+          success: '#327a4d',
+          warning: '#b66b12',
+          error: '#b42318',
+          '--rounded-box': '1.25rem',
+          '--rounded-btn': '0.8rem',
+        },
+        pizzadark: {
+          primary: '#ef554c',
+          'primary-content': '#220806',
+          secondary: '#f7b955',
+          'secondary-content': '#251500',
+          accent: '#67bd82',
+          'accent-content': '#061b0c',
+          neutral: '#151311',
+          'neutral-content': '#f9f2e8',
+          'base-100': '#1c1917',
+          'base-200': '#26211e',
+          'base-300': '#3a322d',
+          'base-content': '#f9f2e8',
+          info: '#68b8e3',
+          success: '#67bd82',
+          warning: '#f4b860',
+          error: '#ff756d',
+          '--rounded-box': '1.25rem',
+          '--rounded-btn': '0.8rem',
+        },
+      },
+    ],
+  },
+};

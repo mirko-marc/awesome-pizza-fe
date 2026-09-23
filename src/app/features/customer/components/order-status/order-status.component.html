@@ -1,0 +1,42 @@
+<section class="surface-card overflow-hidden" aria-labelledby="order-status-title">
+  <div class="flex flex-col gap-4 border-b border-base-300 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
+    <div>
+      <p class="eyebrow">Stato ordine aggiornato</p>
+      <h2 id="order-status-title" class="mt-2 font-display text-3xl font-bold">{{ activeCopy().title }}</h2>
+      <p class="mt-1 text-base-content/65">{{ activeCopy().description }}</p>
+    </div>
+    <div class="rounded-box bg-base-200 px-4 py-3 text-sm">
+      <span class="block text-xs font-bold uppercase tracking-wider text-base-content/50">Ultimo aggiornamento</span>
+      <span class="font-semibold">{{ order().updatedAt | date: 'medium' }}</span>
+    </div>
+  </div>
+
+  <ol class="grid gap-0 p-5 sm:grid-cols-3 sm:p-7" aria-label="Avanzamento ordine">
+    @for (status of statuses; track status; let index = $index; let last = $last) {
+      <li class="relative flex gap-4 pb-8 sm:block sm:pb-0 sm:text-center">
+        @if (!last) {
+          <div
+            class="absolute left-5 top-10 h-[calc(100%-2.5rem)] w-0.5 sm:left-1/2 sm:top-5 sm:h-0.5 sm:w-full"
+            [class.bg-primary]="index < activeIndex()"
+            [class.bg-base-300]="index >= activeIndex()"
+            aria-hidden="true"
+          ></div>
+        }
+        <div
+          class="relative z-10 grid size-10 shrink-0 place-items-center rounded-full border-2 sm:mx-auto"
+          [class.border-primary]="index <= activeIndex()"
+          [class.bg-primary]="index <= activeIndex()"
+          [class.text-primary-content]="index <= activeIndex()"
+          [class.border-base-300]="index > activeIndex()"
+          [class.bg-base-100]="index > activeIndex()"
+        >
+          <span class="material-icons text-xl" aria-hidden="true">{{ statusCopy[status].icon }}</span>
+        </div>
+        <div class="sm:mt-4 sm:px-3">
+          <p class="font-semibold" [class.text-primary]="index === activeIndex()">{{ statusCopy[status].title }}</p>
+          <p class="mt-1 text-xs leading-5 text-base-content/55">{{ statusCopy[status].description }}</p>
+        </div>
+      </li>
+    }
+  </ol>
+</section>

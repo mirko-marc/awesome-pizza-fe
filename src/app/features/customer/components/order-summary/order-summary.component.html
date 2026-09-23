@@ -1,0 +1,64 @@
+<aside class="surface-card overflow-hidden lg:sticky lg:top-24">
+  <div class="bg-neutral p-5 text-neutral-content">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-neutral-content/60">Il tuo ordine</p>
+        <h2 class="mt-1 font-display text-2xl font-bold">Quando vuoi, siamo pronti</h2>
+      </div>
+      <span class="grid size-11 place-items-center rounded-full bg-neutral-content/10">
+        <span class="material-icons" aria-hidden="true">shopping_bag</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="p-5">
+    @if (items().length === 0) {
+      <div class="py-7 text-center">
+        <span class="material-icons text-5xl text-base-content/20" aria-hidden="true">local_pizza</span>
+        <p class="mt-3 font-semibold">Il tuo carrello è vuoto</p>
+        <p class="mt-1 text-sm text-base-content/60">Aggiungi una pizza per iniziare.</p>
+      </div>
+    } @else {
+      <ul class="space-y-4" aria-label="Pizze selezionate">
+        @for (item of items(); track item.pizza.id) {
+          <li class="flex items-start justify-between gap-3">
+            <div>
+              <p class="font-semibold">{{ item.quantity }} × {{ item.pizza.name }}</p>
+              <p class="text-xs text-base-content/55">{{ item.pizza.price | currency: 'EUR' }} cad.</p>
+            </div>
+            <span class="font-semibold">{{ item.lineTotal | currency: 'EUR' }}</span>
+          </li>
+        }
+      </ul>
+    }
+
+    <div class="divider my-4"></div>
+    <div class="flex items-end justify-between">
+      <span class="font-semibold">Totale</span>
+      <span class="font-display text-3xl font-bold">{{ total() | currency: 'EUR' }}</span>
+    </div>
+
+    @if (error()) {
+      <p class="mt-4 flex gap-2 text-sm text-error" role="alert">
+        <span class="material-icons text-lg" aria-hidden="true">error_outline</span>
+        {{ error() }}
+      </p>
+    }
+
+    <button
+      type="button"
+      class="btn btn-primary mt-5 w-full shadow-glow"
+      [disabled]="items().length === 0 || loading()"
+      (click)="checkout.emit()"
+    >
+      @if (loading()) {
+        <span class="loading loading-spinner loading-sm" aria-hidden="true"></span>
+        Invio ordine…
+      } @else {
+        Conferma ordine
+        <span class="material-icons text-lg" aria-hidden="true">arrow_forward</span>
+      }
+    </button>
+    <p class="mt-3 text-center text-xs text-base-content/50">Paga al momento del ritiro.</p>
+  </div>
+</aside>

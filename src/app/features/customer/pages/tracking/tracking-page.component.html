@@ -1,0 +1,77 @@
+<section class="border-b border-base-300 bg-base-100">
+  <div class="page-shell py-12 text-center sm:py-16">
+    <p class="eyebrow">Segui il tuo ordine</p>
+    <h1 class="section-title mt-3">Dov’è la mia pizza?</h1>
+    <p class="mx-auto mt-4 max-w-xl leading-7 text-base-content/65">
+      Inserisci il codice ricevuto nella conferma per vedere gli ultimi aggiornamenti dalla cucina.
+    </p>
+
+    <form class="mx-auto mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row" [formGroup]="trackingForm" (ngSubmit)="search()">
+      <label class="input input-bordered flex h-12 flex-1 items-center gap-3 bg-base-100" [class.input-error]="orderCode.invalid && orderCode.touched">
+        <span class="material-icons text-base-content/40" aria-hidden="true">tag</span>
+        <span class="sr-only">Codice ordine</span>
+        <input
+          type="text"
+          class="grow font-mono"
+          placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+          autocomplete="off"
+          formControlName="orderCode"
+        />
+      </label>
+      <button type="submit" class="btn btn-primary h-12 sm:px-8" [disabled]="store.isTrackingOrder()">
+        Segui ordine
+        <span class="material-icons text-lg" aria-hidden="true">search</span>
+      </button>
+    </form>
+    @if (orderCode.invalid && orderCode.touched) {
+      <p class="mx-auto mt-2 max-w-2xl text-left text-sm text-error">Inserisci un codice ordine valido.</p>
+    }
+  </div>
+</section>
+
+<section class="page-shell min-h-[30rem] py-10 sm:py-14">
+  @if (store.isTrackingOrder()) {
+    <app-loading-indicator label="Controlliamo con la cucina…" />
+  } @else if (store.trackingError(); as error) {
+    <div class="mx-auto max-w-3xl"><app-alert title="Ordine non trovato" [message]="error" /></div>
+  } @else if (store.trackedOrder(); as order) {
+    <div class="mx-auto max-w-4xl space-y-6">
+      <app-order-status [order]="order" />
+
+      <section class="surface-card p-5 sm:p-7" aria-labelledby="order-details-title">
+        <div class="flex flex-col gap-2 border-b border-base-300 pb-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="eyebrow">Dettagli ordine</p>
+            <h2 id="order-details-title" class="mt-2 font-display text-2xl font-bold">Le tue pizze</h2>
+          </div>
+          <p class="break-all font-mono text-xs text-base-content/50">{{ order.orderCode }}</p>
+        </div>
+        <ul class="divide-y divide-base-300">
+          @for (item of order.items; track item.pizzaId) {
+            <li class="flex items-center justify-between gap-4 py-4">
+              <div><p class="font-semibold">{{ item.quantity }} × {{ item.pizzaName }}</p><p class="text-xs text-base-content/50">{{ item.unitPrice | currency: 'EUR' }} cad.</p></div>
+              <span class="font-semibold">{{ item.lineTotal | currency: 'EUR' }}</span>
+            </li>
+          }
+        </ul>
+        <div class="flex items-end justify-between border-t border-base-300 pt-5">
+          <span class="font-semibold">Totale ordine</span>
+          <span class="font-display text-3xl font-bold">{{ order.total | currency: 'EUR' }}</span>
+        </div>
+      </section>
+
+      <button type="button" class="btn btn-outline mx-auto flex" (click)="refresh(order.orderCode)">
+        <span class="material-icons text-lg" aria-hidden="true">refresh</span>
+        Aggiorna stato
+      </button>
+    </div>
+  } @else {
+    <div class="mx-auto max-w-lg py-10 text-center">
+      <span class="mx-auto grid size-20 place-items-center rounded-full bg-primary/10 text-primary">
+        <span class="material-icons text-4xl" aria-hidden="true">receipt_long</span>
+      </span>
+      <h2 class="mt-5 font-display text-2xl font-bold">Qui vedrai il percorso del tuo ordine</h2>
+      <p class="mt-2 leading-7 text-base-content/60">Usa il codice ordine ricevuto dopo la conferma.</p>
+    </div>
+  }
+</section>

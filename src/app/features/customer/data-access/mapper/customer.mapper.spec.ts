@@ -1,4 +1,4 @@
-import { mapOrder } from '@shared/mapper/order.mapper';
+import { mapOrder } from '@shared/data-access/mapper/order.mapper';
 import { mapPizza } from './customer.mapper';
 
 describe('customer mappers', () => {

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { ORDER_STATUSES, Order, OrderStatus } from '@shared/model/order.model';
+import { ORDER_STATUSES, Order, OrderStatus } from '@shared/data-access/model/order.model';
 
 const STATUS_COPY: Record<OrderStatus, { title: string; description: string; icon: string }> = {
   RECEIVED: { title: 'Ordine ricevuto', description: 'La cucina ha ricevuto il tuo ordine.', icon: 'receipt_long' },

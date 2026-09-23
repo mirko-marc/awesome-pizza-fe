@@ -1,7 +1,7 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ORDER_STATUS_LABELS } from '@shared/model/order.model';
+import { ORDER_STATUS_LABELS } from '@shared/data-access/model/order.model';
 import { AlertComponent } from '@shared/ui/alert/alert.component';
 import { LoadingIndicatorComponent } from '@shared/ui/loading-indicator/loading-indicator.component';
 import { AdminStore } from '../../store/admin.store';

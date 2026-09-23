@@ -1,4 +1,4 @@
-import { mapOrderStatus } from '@shared/mapper/order.mapper';
+import { mapOrderStatus } from '@shared/data-access/mapper/order.mapper';
 import { AdminOrderPage, AdminOrderSummary } from '../../models/admin-order.model';
 import { AdminOrderPageResponseDto, AdminOrderSummaryDto } from '../dto/admin-api.dto';
 

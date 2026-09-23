@@ -1,5 +1,5 @@
-import { ORDER_STATUSES, Order, OrderStatus } from '../model/order.model';
-import { OrderResponseDto } from '../dto/order.dto';
+import { ORDER_STATUSES, Order, OrderStatus } from '@shared/data-access/model/order.model';
+import { OrderResponseDto } from '@shared/data-access/dto/order.dto';
 
 export function mapOrder(dto: OrderResponseDto): Order {
   return {

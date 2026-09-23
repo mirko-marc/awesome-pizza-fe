@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { OrderResponseDto } from '@shared/dto/order.dto';
-import { mapOrder } from '@shared/mapper/order.mapper';
-import { Order } from '@shared/model/order.model';
+import { OrderResponseDto } from '@shared/data-access/dto/order.dto';
+import { mapOrder } from '@shared/data-access/mapper/order.mapper';
+import { Order } from '@shared/data-access/model/order.model';
 import { AdminOrderFilters, AdminOrderPage } from '../../models/admin-order.model';
 import { AdminOrderPageResponseDto } from '../dto/admin-api.dto';
 import { mapAdminOrderPage } from '../mapper/admin-order.mapper';

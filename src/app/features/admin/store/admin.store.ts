@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
-import { Order } from '@shared/model/order.model';
+import { Order } from '@shared/data-access/model/order.model';
 import { AdminApiService } from '../data-access/service/admin-api.service';
 import {
   AdminOrderSummary,

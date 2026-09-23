@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ORDER_STATUSES, ORDER_STATUS_LABELS, OrderStatus } from '@shared/model/order.model';
+import { ORDER_STATUSES, ORDER_STATUS_LABELS, OrderStatus } from '@shared/data-access/model/order.model';
 import { AlertComponent } from '@shared/ui/alert/alert.component';
 import { LoadingIndicatorComponent } from '@shared/ui/loading-indicator/loading-indicator.component';
 import { AdminOrderFilters, EMPTY_ADMIN_ORDER_FILTERS } from '../../models/admin-order.model';

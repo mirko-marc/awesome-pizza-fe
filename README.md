@@ -1,36 +1,36 @@
-# Awesome Pizza – Frontend Angular
+# Awesome Pizza – Angular Frontend
 
-Frontend web di **Awesome Pizza**, realizzato con Angular 20. L’applicazione permette al cliente di consultare il menu, creare e monitorare un ordine e mette a disposizione del personale un’area autenticata per cercare e lavorare gli ordini.
+Web frontend for **Awesome Pizza**, built with Angular 20. The application lets customers browse the menu, create and track an order, and provides staff with an authenticated area for searching and processing orders.
 
-## Funzionalità
+## Features
 
-### Area cliente
+### Customer area
 
-- visualizzazione delle pizze disponibili;
-- composizione e invio dell’ordine;
-- conferma con codice pubblico dell’ordine;
-- ricerca tramite `orderCode`;
-- monitoraggio degli stati `RECEIVED`, `IN_PREPARATION` e `COMPLETED`.
+- browse the available pizzas;
+- compose and submit an order;
+- receive a confirmation with the public order code;
+- search for an order using its `orderCode`;
+- track the `RECEIVED`, `IN_PREPARATION`, and `COMPLETED` states.
 
-### Area amministrativa
+### Administration area
 
-- autenticazione tramite username, password e JWT;
-- ricerca paginata degli ordini;
-- filtri per codice, giorno e stato, combinati dal backend con `AND`;
-- persistenza dei filtri nei query parameter della pagina;
-- visualizzazione del dettaglio dell’ordine;
-- passaggio dell’ordine in lavorazione;
-- completamento dell’ordine;
-- gestione del vincolo di un solo ordine in lavorazione alla volta.
+- username/password authentication with JWT;
+- paginated order search;
+- filters by order code, day, and status, combined by the backend with `AND`;
+- filter persistence through page query parameters;
+- complete order details;
+- start order preparation;
+- complete an order;
+- enforcement of the one-order-at-a-time preparation workflow.
 
-Il controllo frontend sul singolo ordine in lavorazione migliora l’esperienza utente, ma la garanzia effettiva deve essere applicata dal backend, anche in presenza di più sessioni concorrenti.
+The frontend check for a single order in preparation improves the user experience, but the backend must enforce the actual invariant, including when multiple sessions operate concurrently.
 
-## Tecnologie utilizzate
+## Technology stack
 
 - Angular 20;
-- TypeScript con configurazione strict;
+- TypeScript with strict configuration;
 - Standalone Components;
-- Angular Router e lazy loading;
+- Angular Router and lazy loading;
 - Angular Reactive Forms;
 - Angular Signals;
 - NgRx SignalStore;
@@ -38,142 +38,142 @@ Il controllo frontend sul singolo ordine in lavorazione migliora l’esperienza 
 - Tailwind CSS 3;
 - DaisyUI 4;
 - Material Icons;
-- ESLint con configurazione Angular;
-- Jasmine e Karma;
-- Docker multi-stage;
-- Nginx per servire la build di produzione e inoltrare le API.
+- ESLint with Angular configuration;
+- Jasmine and Karma;
+- multi-stage Docker build;
+- Nginx for serving the production bundle and proxying API requests.
 
-## Prerequisiti
+## Prerequisites
 
-Per lo sviluppo locale:
+For local development:
 
-- Node.js 22 consigliato;
+- Node.js 22 recommended;
 - npm;
-- backend Awesome Pizza disponibile su `http://localhost:8080`.
+- the Awesome Pizza backend available at `http://localhost:8080`.
 
-Per l’avvio tramite container:
+For running the container:
 
-- Docker Desktop oppure Docker Engine;
+- Docker Desktop or Docker Engine;
 - Docker Compose;
-- backend Awesome Pizza disponibile sulla macchina host alla porta `8080`.
+- the Awesome Pizza backend available on the host machine on port `8080`.
 
-## Avvio locale con hot reload
+## Local development with hot reload
 
-Installare le dipendenze:
+Install the dependencies:
 
 ```bash
 npm install
 ```
 
-Avviare il development server:
+Start the development server:
 
 ```bash
 npm start
 ```
 
-Aprire:
+Open:
 
 ```text
 http://localhost:4200
 ```
 
-In questa modalità Angular usa il **hot reload**: le modifiche ai file TypeScript e HTML vengono ricompiliate e mostrate automaticamente nel browser.
+In this mode Angular uses **hot reload**: changes to TypeScript and HTML files are automatically compiled and displayed in the browser.
 
-Il file `proxy.conf.json` inoltra tutte le richieste `/api` al backend:
+The `proxy.conf.json` file forwards every `/api` request to the backend:
 
 ```text
 Browser -> http://localhost:4200/api/**
         -> http://localhost:8080/api/**
 ```
 
-## Avvio con Docker
+## Running with Docker
 
-La configurazione Docker è pensata per distribuire e provare facilmente il frontend. Il container genera la build Angular di produzione e la serve con Nginx.
+The Docker configuration is designed to make the frontend easy to distribute and try. The container creates the production Angular bundle and serves it with Nginx.
 
-Assicurarsi prima che il backend sia raggiungibile su:
+First, make sure the backend is available at:
 
 ```text
 http://localhost:8080
 ```
 
-Dalla cartella principale del progetto eseguire:
+From the project root, run:
 
 ```bash
 docker compose up --build
 ```
 
-Aprire quindi:
+Then open:
 
 ```text
 http://localhost:4200
 ```
 
-Per avviare il container in background:
+To start the container in the background:
 
 ```bash
 docker compose up --build -d
 ```
 
-Per visualizzare i log:
+To follow the logs:
 
 ```bash
 docker compose logs -f frontend
 ```
 
-Per arrestare e rimuovere il container:
+To stop and remove the container:
 
 ```bash
 docker compose down
 ```
 
-Dopo la prima build, se il codice non è cambiato, è possibile riutilizzare l’immagine esistente:
+After the initial build, when the source code has not changed, the existing image can be reused:
 
 ```bash
 docker compose up -d
 ```
 
-### Hot reload e Docker
+### Hot reload and Docker
 
-Il container usa una build di produzione servita da Nginx e **non include hot reload**. Dopo una modifica al codice è necessario ricostruire l’immagine:
+The container uses a production bundle served by Nginx and **does not provide hot reload**. Rebuild the image after changing the source code:
 
 ```bash
 docker compose up --build -d
 ```
 
-Per sviluppare con aggiornamento automatico utilizzare `npm start`.
+Use `npm start` when developing with automatic browser updates.
 
-Nginx inoltra `/api/**` verso `host.docker.internal:8080`; la configurazione `extra_hosts` in `compose.yaml` rende disponibile questo nome anche negli ambienti Docker che richiedono il mapping esplicito.
+Nginx forwards `/api/**` to `host.docker.internal:8080`. The `extra_hosts` configuration in `compose.yaml` makes this hostname available in Docker environments that require an explicit mapping.
 
-## Credenziali amministrative
+## Administration credentials
 
-Il frontend non contiene credenziali predefinite. L’utente amministrativo è configurato dal backend, normalmente tramite:
+The frontend does not contain default credentials. The administrative user is configured by the backend, typically through:
 
 ```text
 ADMIN_USERNAME
 ADMIN_PASSWORD
 ```
 
-La pagina di accesso è disponibile su:
+The login page is available at:
 
 ```text
 http://localhost:4200/admin/login
 ```
 
-## Rotte applicative
+## Application routes
 
-| Rotta | Accesso | Descrizione |
+| Route | Access | Description |
 | --- | --- | --- |
-| `/` | Pubblico | Menu e creazione ordine |
-| `/confirmation/:orderCode` | Pubblico | Conferma dell’ordine |
-| `/track` | Pubblico | Ricerca ordine |
-| `/track/:orderCode` | Pubblico | Tracking diretto tramite codice |
-| `/admin/login` | Pubblico | Login del personale |
-| `/admin/orders` | Protetto | Ricerca e lista paginata degli ordini |
-| `/admin/orders/:orderCode` | Protetto | Dettaglio e lavorazione ordine |
+| `/` | Public | Menu and order creation |
+| `/confirmation/:orderCode` | Public | Order confirmation |
+| `/track` | Public | Order search |
+| `/track/:orderCode` | Public | Direct tracking by order code |
+| `/admin/login` | Public | Staff login |
+| `/admin/orders` | Protected | Paginated order search and list |
+| `/admin/orders/:orderCode` | Protected | Order details and processing actions |
 
-## Architettura
+## Architecture
 
-Il codice è organizzato principalmente per feature/domain. Le dipendenze trasversali vivono in `core`, mentre modelli e primitive realmente condivisi sono in `shared`.
+The codebase is organized primarily by feature and domain. Cross-cutting application concerns live in `core`, while models and primitives genuinely shared by multiple features live in `shared`.
 
 ```text
 src/app/
@@ -210,63 +210,63 @@ src/app/
     └── ui/
 ```
 
-### Flusso dei dati
+### Data flow
 
-Le rappresentazioni HTTP sono separate dai modelli utilizzati dall’interfaccia:
+HTTP representations are kept separate from the models used by the UI:
 
 ```text
 Backend DTO -> Mapper -> Frontend Model -> SignalStore -> Component
 ```
 
-- i `dto` rappresentano il contratto JSON del backend;
-- i `mapper` convertono DTO e valori temporali nei modelli frontend;
-- i `service` contengono esclusivamente le chiamate HTTP;
-- i SignalStore gestiscono stato applicativo, caricamenti ed errori;
-- lo stato locale dei form rimane nei componenti tramite Reactive Forms.
+- `dto` files represent the backend JSON contract;
+- `mapper` files convert DTOs and temporal values into frontend models;
+- `service` files contain only HTTP communication;
+- SignalStores manage application state, loading states, and errors;
+- local form state remains in the relevant components through Reactive Forms.
 
-## Gestione dello stato
+## State management
 
 ### CustomerStore
 
-Gestisce menu, quantità selezionate, carrello, creazione dell’ordine, ordine corrente, tracking, caricamenti ed errori della feature Customer.
+Manages the pizza menu, selected quantities, cart, order creation, current order, order tracking, loading states, and errors for the Customer feature.
 
 ### AdminStore
 
-Gestisce pagina degli ordini, paginazione, filtri applicati, dettaglio selezionato, ordine conosciuto come attualmente in lavorazione, caricamenti ed errori della feature Admin.
+Manages the order page, pagination, applied filters, selected details, the order currently known to be in preparation, loading states, and errors for the Admin feature.
 
-Dopo un refresh lo store viene ricreato. Gli stati degli ordini vengono ricaricati dal backend, mentre i filtri Admin vengono recuperati dai query parameter, per esempio:
+The store is recreated after a browser refresh. Order states are reloaded from the backend, while Admin filters are restored from query parameters, for example:
 
 ```text
 /admin/orders?day=2026-09-23&status=RECEIVED
 ```
 
-## Autenticazione
+## Authentication
 
-Il flusso Admin è il seguente:
+The Admin authentication flow is:
 
 ```text
 Login -> POST /api/v1/auth/login -> JWT -> AuthStore -> sessionStorage
 ```
 
-- il token, il tipo e la scadenza vengono conservati in `sessionStorage`;
-- `authGuard` protegge le rotte `/admin/**`;
-- `authInterceptor` aggiunge `Authorization: Bearer <token>` alle API Admin;
-- una risposta `401 Unauthorized` elimina la sessione locale e riporta alla pagina di login.
+- the token, token type, and expiration are stored in `sessionStorage`;
+- `authGuard` protects `/admin/**` routes;
+- `authInterceptor` adds `Authorization: Bearer <token>` to Admin API requests;
+- a `401 Unauthorized` response clears the local session and redirects to the login page.
 
-Il guard protegge la navigazione dell’interfaccia, ma la sicurezza reale deve essere sempre applicata dal backend.
+The guard protects UI navigation, but real security must always be enforced by the backend.
 
-## Temi
+## Themes
 
-L’applicazione include due temi DaisyUI centralizzati in `tailwind.config.js`:
+The application provides two centralized DaisyUI themes in `tailwind.config.js`:
 
 - `pizzalight`;
 - `pizzadark`.
 
-La preferenza viene gestita dal `ThemeService`; i componenti utilizzano token DaisyUI e utility Tailwind senza dipendere dalla logica del tema.
+The preference is managed by `ThemeService`. Components use DaisyUI tokens and Tailwind utilities without depending on theme implementation details.
 
-## API utilizzate
+## API endpoints
 
-### Pubbliche
+### Public endpoints
 
 ```text
 GET  /api/v1/pizzas
@@ -275,7 +275,7 @@ GET  /api/v1/orders/{orderCode}
 POST /api/v1/auth/login
 ```
 
-### Protette
+### Protected endpoints
 
 ```text
 GET   /api/v1/admin/orders
@@ -284,40 +284,40 @@ PATCH /api/v1/admin/orders/{orderCode}/start
 PATCH /api/v1/admin/orders/{orderCode}/complete
 ```
 
-### Ricerca Admin
+### Admin order search
 
-La lista usa paginazione Spring zero-based:
+The order list uses zero-based Spring pagination:
 
 ```text
 page=0
 size=20
 sort=createdAt,desc
-orderCode=<uuid>       opzionale
-day=2026-09-23         opzionale
-status=RECEIVED        opzionale
+orderCode=<uuid>       optional
+day=2026-09-23         optional
+status=RECEIVED        optional
 ```
 
-Vengono inviati solo i filtri valorizzati. Il backend combina i filtri con `AND` e restituisce un `PageResponse` contenente `content`, `page`, `size`, `totalElements`, `totalPages`, `first` e `last`.
+Only populated filters are sent. The backend combines filters with `AND` and returns a `PageResponse` containing `content`, `page`, `size`, `totalElements`, `totalPages`, `first`, and `last`.
 
-Le transizioni previste sono:
+The supported transitions are:
 
 ```text
 RECEIVED -> IN_PREPARATION -> COMPLETED
 ```
 
-Se un altro ordine è già in lavorazione, il backend restituisce `409 Conflict`.
+When another order is already in preparation, the backend returns `409 Conflict`.
 
-## Comandi disponibili
+## Available commands
 
-| Comando | Descrizione |
+| Command | Description |
 | --- | --- |
-| `npm start` | Avvia Angular in sviluppo con hot reload e proxy API |
-| `npm run build` | Genera la build di produzione |
-| `npm run watch` | Ricompila la build di sviluppo quando cambiano i file |
-| `npm run lint` | Esegue ESLint |
-| `npm test` | Esegue i test una volta e termina |
+| `npm start` | Starts Angular in development mode with hot reload and API proxy |
+| `npm run build` | Creates the production bundle |
+| `npm run watch` | Rebuilds the development bundle when files change |
+| `npm run lint` | Runs ESLint |
+| `npm test` | Runs the test suite once and exits |
 
-## Verifiche prima della consegna
+## Pre-delivery checks
 
 ```bash
 npm run lint
@@ -325,20 +325,20 @@ npm run build
 npm test
 ```
 
-## Risoluzione dei problemi
+## Troubleshooting
 
-### Il frontend si apre ma le API non funzionano
+### The frontend opens, but API calls fail
 
-Verificare che il backend risponda su `http://localhost:8080`. In sviluppo controllare `proxy.conf.json`; con Docker controllare `docker/nginx/default.conf`.
+Verify that the backend responds at `http://localhost:8080`. In local development, check `proxy.conf.json`; with Docker, check `docker/nginx/default.conf`.
 
-### Le modifiche non appaiono nel browser
+### Source changes do not appear in the browser
 
-Con `npm start` eseguire un refresh completo se il server mantiene un vecchio errore di compilazione. Con Docker ricostruire l’immagine:
+With `npm start`, perform a hard refresh if the development server retains an old compilation error. With Docker, rebuild the image:
 
 ```bash
 docker compose up --build -d
 ```
 
-### L’accesso Admin restituisce 401
+### Admin login returns 401
 
-Verificare le credenziali configurate dal backend e che l’utente possieda il ruolo `PIZZA_MAKER`.
+Verify the credentials configured by the backend and ensure the user has the `PIZZA_MAKER` role.

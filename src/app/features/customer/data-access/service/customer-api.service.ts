@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { OrderResponseDto } from '@shared/dto/order.dto';
-import { mapOrder } from '@shared/mapper/order.mapper';
-import { Order } from '@shared/model/order.model';
+import { OrderResponseDto } from '@shared/data-access/dto/order.dto';
+import { mapOrder } from '@shared/data-access/mapper/order.mapper';
+import { Order } from '@shared/data-access/model/order.model';
 import { Pizza } from '../../models/pizza.model';
 import { CreateOrderRequestDto, PizzaResponseDto } from '../dto/customer-api.dto';
 import { mapPizza } from '../mapper/customer.mapper';

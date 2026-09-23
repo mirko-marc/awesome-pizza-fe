@@ -1,4 +1,4 @@
-import { OrderStatus } from '@shared/model/order.model';
+import { OrderStatus } from '@shared/data-access/model/order.model';
 
 export interface AdminOrderSummary {
   readonly id: number;

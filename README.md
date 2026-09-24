@@ -35,6 +35,7 @@ The frontend check for a single order in preparation improves the user experienc
 - Angular Signals;
 - NgRx SignalStore;
 - RxJS;
+- STOMP over WebSocket with `@stomp/stompjs`;
 - Tailwind CSS 3;
 - DaisyUI 4;
 - Material Icons;
@@ -196,6 +197,7 @@ src/app/
 │   │   ├── pages/
 │   │   └── store/
 │   └── admin/
+│       ├── components/
 │       ├── data-access/
 │       │   ├── dto/
 │       │   ├── mapper/
@@ -204,9 +206,10 @@ src/app/
 │       ├── pages/
 │       └── store/
 └── shared/
-    ├── dto/
-    ├── mapper/
-    ├── model/
+    ├── data-access/
+    │   ├── dto/
+    │   ├── mapper/
+    │   └── model/
     └── ui/
 ```
 
@@ -263,6 +266,33 @@ The application provides two centralized DaisyUI themes in `tailwind.config.js`:
 - `pizzadark`.
 
 The preference is managed by `ThemeService`. Components use DaisyUI tokens and Tailwind utilities without depending on theme implementation details.
+
+## Real-time Admin notifications
+
+The Admin shell connects to the native STOMP endpoint at `/ws` and subscribes to:
+
+```text
+/topic/admin/orders
+```
+
+The expected message uses the same order-status update contract used by real-time tracking:
+
+```json
+{
+  "orderCode": "10000000-0000-0000-0000-000000000001",
+  "status": "RECEIVED",
+  "eventType": "ORDER_CREATED",
+  "occurredAt": "2026-09-23T12:00:00Z"
+}
+```
+
+`eventType` can be `ORDER_CREATED`.
+
+The bell keeps the latest 20 notifications in memory, displays an unread counter, and opens the related order detail. Incoming events also refresh the current REST order page and the open detail when applicable. The client reconnects automatically after five seconds when the connection is interrupted.
+
+The backend publishes new-order and status-change events to `/topic/admin/orders` after the database transaction commits. It authenticates the STOMP `CONNECT` frame and restricts the topic subscription to users with `ROLE_PIZZA_MAKER`. The frontend sends the JWT through the STOMP `Authorization` header and never sends application messages through the socket.
+
+Notifications are intentionally ephemeral. After a full refresh, the order list is restored from REST, but notification history is empty unless the backend provides a dedicated notification-history API.
 
 ## API endpoints
 
@@ -324,21 +354,3 @@ npm run lint
 npm run build
 npm test
 ```
-
-## Troubleshooting
-
-### The frontend opens, but API calls fail
-
-Verify that the backend responds at `http://localhost:8080`. In local development, check `proxy.conf.json`; with Docker, check `docker/nginx/default.conf`.
-
-### Source changes do not appear in the browser
-
-With `npm start`, perform a hard refresh if the development server retains an old compilation error. With Docker, rebuild the image:
-
-```bash
-docker compose up --build -d
-```
-
-### Admin login returns 401
-
-Verify the credentials configured by the backend and ensure the user has the `PIZZA_MAKER` role.

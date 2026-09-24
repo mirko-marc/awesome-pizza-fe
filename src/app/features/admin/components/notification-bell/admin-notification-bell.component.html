@@ -1,0 +1,69 @@
+<details class="dropdown dropdown-end" (toggle)="onToggle($event)">
+  <summary
+    class="btn btn-circle btn-ghost relative"
+    aria-label="Apri notifiche ordini"
+    [attr.aria-description]="store.unreadCount() ? store.unreadCount() + ' notifiche non lette' : 'Nessuna notifica non letta'"
+  >
+    <span class="material-icons" aria-hidden="true">notifications</span>
+    @if (store.unreadCount() > 0) {
+      <span class="badge badge-secondary badge-sm absolute -right-1 -top-1 min-w-5 px-1 text-[0.65rem] font-bold">
+        {{ store.unreadCount() > 9 ? '9+' : store.unreadCount() }}
+      </span>
+    }
+  </summary>
+
+  <div class="dropdown-content z-50 mt-3 w-[min(23rem,calc(100vw-2rem))] overflow-hidden rounded-box border border-base-300 bg-base-100 text-base-content shadow-2xl">
+    <div class="flex items-center justify-between border-b border-base-300 px-4 py-3">
+      <div>
+        <h2 class="font-display text-lg font-bold">Notifiche</h2>
+        <p class="flex items-center gap-1.5 text-xs text-base-content/55">
+          <span
+            class="size-2 rounded-full"
+            [class.bg-success]="store.connectionStatus() === 'connected'"
+            [class.bg-warning]="store.connectionStatus() === 'connecting'"
+            [class.bg-error]="store.connectionStatus() === 'error'"
+            [class.bg-base-content]="store.connectionStatus() === 'disconnected'"
+          ></span>
+          @switch (store.connectionStatus()) {
+            @case ('connected') { Aggiornamenti attivi }
+            @case ('connecting') { Connessione in corso… }
+            @case ('error') { Connessione non disponibile }
+            @default { Aggiornamenti disattivati }
+          }
+        </p>
+      </div>
+      @if (store.notifications().length > 0) {
+        <button type="button" class="btn btn-ghost btn-xs" (click)="store.clear()">Svuota</button>
+      }
+    </div>
+
+    <div class="max-h-96 overflow-y-auto">
+      @for (notification of store.notifications(); track notification.id) {
+        <button
+          type="button"
+          class="flex w-full gap-3 border-b border-base-300 px-4 py-4 text-left transition-colors hover:bg-base-200"
+          [class.bg-base-200]="!notification.read"
+          (click)="openNotification(notification)"
+        >
+          <span class="grid size-10 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+            <span class="material-icons text-xl" aria-hidden="true">
+              {{ notification.status === 'RECEIVED' ? 'receipt_long' : notification.status === 'IN_PREPARATION' ? 'local_fire_department' : 'task_alt' }}
+            </span>
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-semibold">{{ notification.title }}</span>
+            <span class="mt-1 block text-sm leading-5 text-base-content/60">{{ notification.message }}</span>
+            <span class="mt-2 block truncate font-mono text-[0.7rem] text-base-content/45">{{ notification.orderCode }}</span>
+            <span class="mt-1 block text-xs text-base-content/45">{{ notification.occurredAt | date: 'dd/MM/yyyy, HH:mm' }}</span>
+          </span>
+        </button>
+      } @empty {
+        <div class="px-6 py-10 text-center">
+          <span class="material-icons text-4xl text-base-content/20" aria-hidden="true">notifications_none</span>
+          <p class="mt-2 font-semibold">Nessuna notifica</p>
+          <p class="mt-1 text-sm text-base-content/55">I nuovi ordini compariranno qui.</p>
+        </div>
+      }
+    </div>
+  </div>
+</details>

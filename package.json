@@ -13,7 +13,14 @@
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
-    "overrides": [{ "files": "*.html", "options": { "parser": "angular" } }]
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
   },
   "dependencies": {
     "@angular/common": "20.3.16",
@@ -23,6 +30,7 @@
     "@angular/platform-browser": "20.3.16",
     "@angular/router": "20.3.16",
     "@ngrx/signals": "20.1.0",
+    "@stomp/stompjs": "^7.3.0",
     "daisyui": "4.12.24",
     "material-icons": "1.13.14",
     "rxjs": "~7.8.0",
